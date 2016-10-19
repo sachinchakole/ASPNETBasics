@@ -1,0 +1,57 @@
+﻿@model IEnumerable<MyProject.Models.Product>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Category.CatName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProdName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProdPrice)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProdImageUrl)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProdDescription)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Category.CatName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProdName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProdPrice)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProdImageUrl)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProdDescription)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ProdId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ProdId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ProdId })
+        </td>
+    </tr>
+}
+
+</table>
