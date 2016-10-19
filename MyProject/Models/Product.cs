@@ -8,17 +8,16 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MyProject.Models
 {
-    [Table("Product")]//Table Name
     public class Product
     {
-        [Key]
-        public int ProdId { get; set; }
+       
+        public int ProductId { get; set; }
         public string ProdName { get; set; }
         public decimal ProdPrice { get; set; }
         public string ProdImageUrl { get; set; }
         public string ProdDescription { get; set; }
-        [ForeignKey("Category")]
-        public int CategoryID { get; set; }
+
+        public int CategoryId { get; set; }
         public virtual Category Category { get; set; }
     }
 }
