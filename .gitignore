@@ -6,4 +6,4 @@
 /MyProject/obj/Debug
 /packages
 *.user
-/.vs/MyProject/v14/.suo
+.vs/*

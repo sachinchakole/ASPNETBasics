@@ -48,7 +48,7 @@ namespace MyProject.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ProdId,ProdName,ProdPrice,ProdImageUrl,ProdDescription,CategoryID")] Product product)
+        public ActionResult Create([Bind(Include = "ProductId,ProdName,ProdPrice,ProdImageUrl,ProdDescription,CategoryId")] Product product)
         {
             if (ModelState.IsValid)
             {
@@ -57,18 +57,20 @@ namespace MyProject.Controllers
                 db.SaveChanges();
 
                 HttpPostedFileBase imageurl = Request.Files["ProdImageUrl"];
+                // BUG: the image in not uploading
                 if (imageurl != null && imageurl.ContentLength > 0)
                 {
                     string extension = System.IO.Path.GetExtension(imageurl.FileName);
-                    string path = string.Format("{0}/{1}{2}", Server.MapPath("~/images"), product.ProdId, extension);
+                    //TODO: change this to relative path and add it to the config
+                    string path = string.Format("{0}/{1}{2}", Server.MapPath("~/images"), product.ProductId, extension);
                     imageurl.SaveAs(path);
-                    product.ProdImageUrl = @"~/images" + product.ProdId + extension;
+                    product.ProdImageUrl = @"~/images" + product.ProductId + extension;
                     db.SaveChanges();
                 }
                     return RedirectToAction("Index");
             }
 
-            ViewBag.CategoryID = new SelectList(db.Categories, "CategoryId", "CatName", product.CategoryID);
+            ViewBag.CategoryID = new SelectList(db.Categories, "CategoryId", "CatName", product.CategoryId);
             return View(product);
         }
 
@@ -84,7 +86,7 @@ namespace MyProject.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.CategoryID = new SelectList(db.Categories, "CategoryId", "CatName", product.CategoryID);
+            ViewBag.CategoryID = new SelectList(db.Categories, "CategoryId", "CatName", product.CategoryId);
             return View(product);
         }
 
@@ -93,7 +95,7 @@ namespace MyProject.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ProdId,ProdName,ProdPrice,ProdImageUrl,ProdDescription,CategoryID")] Product product)
+        public ActionResult Edit([Bind(Include = "ProductId,ProdName,ProdPrice,ProdImageUrl,ProdDescription,CategoryId")] Product product)
         {
             if (ModelState.IsValid)
             {
@@ -101,7 +103,7 @@ namespace MyProject.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.CategoryID = new SelectList(db.Categories, "CategoryId", "CatName", product.CategoryID);
+            ViewBag.CategoryID = new SelectList(db.Categories, "CategoryId", "CatName", product.CategoryId);
             return View(product);
         }
 
