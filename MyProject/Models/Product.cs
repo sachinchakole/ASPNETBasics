@@ -15,6 +15,7 @@ namespace MyProject.Models
         public string ProdName { get; set; }
         public decimal ProdPrice { get; set; }
         public string ProdImageUrl { get; set; }
+        
         public string ProdDescription { get; set; }
 
         public int CategoryId { get; set; }

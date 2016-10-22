@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -48,26 +49,32 @@ namespace MyProject.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ProductId,ProdName,ProdPrice,ProdImageUrl,ProdDescription,CategoryId")] Product product)
+        public ActionResult Create(Product product, HttpPostedFileBase ProdImageFile)
         {
             if (ModelState.IsValid)
             {
-               
-                db.Products.Add(product);
-                db.SaveChanges();
-
-                HttpPostedFileBase imageurl = Request.Files["ProdImageUrl"];
+                //HttpPostedFileBase imageurl = Request.Files["ProdImageUrl"];
                 // BUG: the image in not uploading
-                if (imageurl != null && imageurl.ContentLength > 0)
+                List<Product> listProd = new List<Product>();
+
+                for (int i = 0; i < Request.Files.Count; i++)
                 {
-                    string extension = System.IO.Path.GetExtension(imageurl.FileName);
-                    //TODO: change this to relative path and add it to the config
-                    string path = string.Format("{0}/{1}{2}", Server.MapPath("~/images"), product.ProductId, extension);
-                    imageurl.SaveAs(path);
-                    product.ProdImageUrl = @"~/images" + product.ProductId + extension;
-                    db.SaveChanges();
+                    var file = Request.Files[i];
+                    
+                    if (file != null && file.ContentLength > 0)
+                    {
+                        string extension = System.IO.Path.GetExtension(file.FileName);
+                        string filename = Path.GetFileName(file.FileName);
+                        //TODO: change this to relative path and add it to the config
+                        string path = Path.Combine(Server.MapPath("~/images"), filename);
+                        file.SaveAs(path);
+                        //product.ProdImageUrl = @"~/images" + product.ProductId + extension;
+
+                        db.Products.Add(product);
+                        db.SaveChanges();
+                    }
                 }
-                    return RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             ViewBag.CategoryID = new SelectList(db.Categories, "CategoryId", "CatName", product.CategoryId);
