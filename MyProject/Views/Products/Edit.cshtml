@@ -34,10 +34,10 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.ProdImageUrl, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.ProdImageFile, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.ProdImageUrl, new { htmlAttributes = new { type = "file", id = "imageUrl", @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ProdImageUrl, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.ProdImageFile, new { htmlAttributes = new { type = "file", id = "imageUrl", @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ProdImageFile, "", new { @class = "text-danger" })
             </div>
         </div>
 
