@@ -11,7 +11,7 @@ using MyProject.Models;
 
 namespace MyProject.Controllers
 {
-    public class ProductsController : Controller
+    public class ProductController : Controller
     {
         private MyDatabaseContext db = new MyDatabaseContext();
 
@@ -49,31 +49,24 @@ namespace MyProject.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Product product, HttpPostedFileBase ProdImageFile)
+        public ActionResult Create(Product product, HttpPostedFileBase Imagefile)
         {
+            
             if (ModelState.IsValid)
-            {
-                //HttpPostedFileBase imageurl = Request.Files["ProdImageUrl"];
-                // BUG: the image in not uploading
-                List<Product> listProd = new List<Product>();
-
-                for (int i = 0; i < Request.Files.Count; i++)
-                {
-                    var file = Request.Files[i];
-                    
-                    if (file != null && file.ContentLength > 0)
+            {    
+                    if (Imagefile != null)
                     {
-                        string extension = System.IO.Path.GetExtension(file.FileName);
-                        string filename = Path.GetFileName(file.FileName);
+                        string extension = System.IO.Path.GetExtension(Imagefile.FileName);
+                        string filename = Path.GetFileName(Imagefile.FileName);
                         //TODO: change this to relative path and add it to the config
                         string path = Path.Combine(Server.MapPath("~/images"), filename);
-                        file.SaveAs(path);
+                        Imagefile.SaveAs(path);
                         //product.ProdImageUrl = @"~/images" + product.ProductId + extension;
-
+                        product.ProdImageUrl = filename;
                         db.Products.Add(product);
                         db.SaveChanges();
                     }
-                }
+                
                 return RedirectToAction("Index");
             }
 
@@ -102,13 +95,23 @@ namespace MyProject.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ProductId,ProdName,ProdPrice,ProdImageUrl,ProdDescription,CategoryId")] Product product)
+        public ActionResult Edit([Bind(Include = "ProductId,ProdName,ProdPrice,ProdImageUrl,ProdDescription,CategoryId")] Product product,HttpPostedFileBase Imagefile)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(product).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (Imagefile != null)
+                {
+                    string extension = System.IO.Path.GetExtension(Imagefile.FileName);
+                    string filename = Path.GetFileName(Imagefile.FileName);
+                    //TODO: change this to relative path and add it to the config
+                    string path = Path.Combine(Server.MapPath("~/images"), filename);
+                    Imagefile.SaveAs(path);
+                    product.ProdImageUrl = filename;
+                    db.Entry(product).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                
             }
             ViewBag.CategoryID = new SelectList(db.Categories, "CategoryId", "CatName", product.CategoryId);
             return View(product);

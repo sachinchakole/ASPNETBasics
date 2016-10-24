@@ -10,7 +10,7 @@ using MyProject.Models;
 
 namespace MyProject.Controllers
 {
-    public class CategoriesController : Controller
+    public class CategoryController : Controller
     {
         private MyDatabaseContext db = new MyDatabaseContext();
 
