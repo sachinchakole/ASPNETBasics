@@ -23,7 +23,7 @@ namespace MyProject.Migrations
                         ProductId = c.Int(nullable: false, identity: true),
                         ProdName = c.String(),
                         ProdPrice = c.Decimal(nullable: false, precision: 18, scale: 2),
-                        ProdImageName = c.String(),
+                        ProdImageUrl = c.String(),
                         ProdDescription = c.String(),
                         CategoryId = c.Int(nullable: false),
                     })
